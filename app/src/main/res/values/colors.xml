@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="pink">#FFff7f91</color>
+    <color name="purple">#FF88397b</color>
+    <color name="black">#FF000000</color>
+    <color name="gray_600">#FF494949</color>
+    <color name="gray_400">#FF737373</color>
+    <color name="gray_200">#FFCDCDCD</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="white_opacid">#33FFFFFF</color>
+
+</resources>
