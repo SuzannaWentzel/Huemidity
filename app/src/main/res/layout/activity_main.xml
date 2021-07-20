@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+    <!--    Splash screen -->
     <LinearLayout
         android:id="@+id/splash_screen"
         android:layout_width="match_parent"
@@ -46,6 +47,8 @@
             android:visibility="invisible"/>
     </LinearLayout>
 
+
+    <!--    Main screen -->
     <LinearLayout
         android:id="@+id/main_container"
         android:layout_width="match_parent"
@@ -93,7 +96,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/gray_600"
-                    android:layout_centerHorizontal="true"/>
+                    android:layout_centerHorizontal="true"
+                    android:onClick="changeCity"
+                    android:clickable="true"
+                    android:focusable="true"/>
 
 
                 <TextView
@@ -145,6 +151,12 @@
             android:layout_weight="4"
             android:visibility="invisible"/>
     </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/select_city_container"
+        android:visibility="gone"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

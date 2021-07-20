@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".SelectCity"
+    android:background="@color/gray_200">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/btn_back"
+            android:layout_marginStart="24sp"
+            android:layout_marginTop="24sp"
+            android:layout_width="32sp"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/back_simple"
+            android:elevation="8sp"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true">
+
+            <TextView
+                android:id="@+id/city_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/city_title"
+                android:textSize="32sp"
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                android:layout_marginBottom="40sp"
+                android:layout_marginStart="48sp"
+                android:layout_marginEnd="24sp"/>
+
+            <RelativeLayout
+                android:id="@+id/container_city_input"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="100sp"
+                android:layout_below="@id/city_title"
+                android:paddingStart="24sp"
+                android:paddingEnd="24sp"
+                android:paddingTop="16sp"
+                android:paddingBottom="16sp"
+                android:layout_marginBottom="24sp"
+                android:layout_marginStart="24sp"
+                android:layout_marginEnd="24sp"
+                android:background="@drawable/rounded_borders"
+                android:elevation="8sp">
+
+                <TextView
+                    android:id="@+id/label_city"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/city_label_input" />
+
+                <EditText
+                    android:id="@+id/input_city"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/label_city"
+                    android:inputType="text"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/container_gps"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="100sp"
+                android:layout_below="@id/container_city_input"
+                android:paddingStart="24sp"
+                android:paddingEnd="24sp"
+                android:paddingTop="16sp"
+                android:paddingBottom="16sp"
+                android:layout_marginBottom="24sp"
+                android:layout_marginStart="24sp"
+                android:layout_marginEnd="24sp"
+                android:background="@drawable/rounded_borders"
+                android:elevation="8sp">
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/container_gps">
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btn_save_city"
+                    android:layout_marginTop="16sp"
+                    android:layout_marginBottom="16sp"
+                    android:layout_marginStart="24sp"
+                    android:layout_marginEnd="24sp"
+                    android:layout_width="match_parent"
+                    android:layout_height="46sp"
+                    android:padding="0dp"
+                    android:background="@drawable/rounded_button"
+                    android:textColor="@color/white"
+                    android:text="@string/city_label_select"
+                    android:textAllCaps="false"
+                    android:elevation="8sp"
+                    android:onClick="saveCity"
+                    android:clickable="true"
+                    android:focusable="true"/>
+            </RelativeLayout>
+        </RelativeLayout>
+    </RelativeLayout>
+</FrameLayout>

@@ -1,6 +1,8 @@
 package com.example.huemidity;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.annotation.SuppressLint;
 import android.os.AsyncTask;
@@ -10,6 +12,7 @@ import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -19,12 +22,12 @@ import org.json.JSONObject;
 public class MainActivity extends AppCompatActivity implements View.OnTouchListener {
     /* constants */
     private final String TAG = "[DEBUG]";
-    //TODO: make city editable
     public String city = "Enschede";
 
     /* screen variables */
     public View splash_screen;
     public View main_screen;
+    public View select_city_screen;
 
     /* view elements */
     public TextView tempTxt;
@@ -32,6 +35,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     public TextView maxTempTxt;
     public TextView minTempTxt;
     public TextView humidityTxt;
+    public TextView cityLabel;
 
     private GestureDetector gestureDetector;
     private ProgressBar weatherSpinner;
@@ -58,6 +62,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     private void findViews() {
         // init screens
         main_screen = findViewById(R.id.main_container);
+        select_city_screen = findViewById(R.id.select_city_container);
 
         // init views
         cityTxt = findViewById(R.id.city);
@@ -65,7 +70,8 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         maxTempTxt = findViewById(R.id.max_temp);
         minTempTxt = findViewById(R.id.min_temp);
         humidityTxt = findViewById(R.id.humidity);
-        
+
+
         // init spinner
         weatherSpinner = findViewById(R.id.spinner_weather);
     }
@@ -109,6 +115,26 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         return true;
     }
 
+    public void changeCity(View view) {
+        SelectCity selectCity = SelectCity.newInstance(city);
+        select_city_screen.setVisibility(View.VISIBLE);
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.add(R.id.select_city_container, selectCity);
+        transaction.addToBackStack(null);
+        transaction.commit();
+    }
+
+    public void saveCity(View view) {
+        EditText cityTxt = findViewById(R.id.input_city);
+        city = cityTxt.getText().toString().trim();
+        new WeatherTask().execute();
+
+        //TODO: store entered city in memory
+
+
+        Log.d(TAG, "saveCity: Saved city");
+    }
+
     @SuppressLint("StaticFieldLeak")
     class WeatherTask extends AsyncTask<String, Void, String> {
         @Override
@@ -144,18 +170,31 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                 /* populate data into views */
                 cityTxt.setText(city);
                 tempTxt.setText(temp);
+                Log.d(TAG, "onPostExecute: temp: " + temp);
                 maxTempTxt.setText(tempMax);
                 minTempTxt.setText(tempMin);
                 humidityTxt.setText(humidity);
 
-                /* Views populated, Hiding the splash, Showing the main design */
+                // Hide spinner, hide the splash screen, show the main design
                 //TODO: add fade-transition between screens
                 weatherSpinner.setVisibility(View.GONE);
                 splash_screen.setVisibility(View.GONE);
                 main_screen.setVisibility(View.VISIBLE);
 
+                // close fragment if found on stack
+                FragmentManager manager = getSupportFragmentManager();
+                FragmentTransaction transaction = manager.beginTransaction();
+                if (manager.getBackStackEntryCount() > 0) {
+                    manager.popBackStack();
+                }
+
+                transaction.commit();
+
             } catch (JSONException e) {
-                Log.d("[DEBUG]", "onPostExecute: " + e.getMessage());
+                Log.d("[DEBUG]", "EXEPTION: onPostExecute: " + e.getMessage());
+                cityLabel = findViewById(R.id.label_city);
+                cityLabel.setTextColor(getResources().getColor(R.color.red));
+                cityLabel.setText(getResources().getString(R.string.city_label_input_error));
             }
         }
 

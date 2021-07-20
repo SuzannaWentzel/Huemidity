@@ -1,4 +1,9 @@
 <resources>
     <string name="app_name">Huemidity</string>
     <string name="app_description">A weather app</string>
+    <string name="city_title">Choose your location</string>
+    <string name="city_label_input">Enter your city</string>
+    <string name="city_label_input_error">Enter a valid city</string>
+    <string name="city_label_gps">Use GPS</string>
+    <string name="city_label_select">Check weather</string>
 </resources>
