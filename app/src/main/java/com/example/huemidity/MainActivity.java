@@ -5,9 +5,11 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.annotation.SuppressLint;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
@@ -20,16 +22,17 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class MainActivity extends AppCompatActivity implements View.OnTouchListener {
-    /* constants */
-    private final String TAG = "[DEBUG]";
-    public String city = "Enschede";
+    // constants
+    private static final String TAG = "[DEBUG]";
+    private static final String CITY = "city";
+    private static final String DEFAULT_CITY = "Enschede";
 
-    /* screen variables */
+    // screen variables
     public View splash_screen;
     public View main_screen;
     public View select_city_screen;
 
-    /* view elements */
+    // view elements
     public TextView tempTxt;
     public TextView cityTxt;
     public TextView maxTempTxt;
@@ -37,8 +40,12 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     public TextView humidityTxt;
     public TextView cityLabel;
 
+    // other global variables
     private GestureDetector gestureDetector;
     private ProgressBar weatherSpinner;
+    private SharedPreferences sharedPreferences;
+    public String city;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +64,10 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
         // wait 2s before starting request, to avoid flashing splash screen
         waitAndRunWeather();
+
+        // init app preferences & city
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        city = sharedPreferences.getString(CITY, DEFAULT_CITY);
     }
 
     private void findViews() {
@@ -70,7 +81,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         maxTempTxt = findViewById(R.id.max_temp);
         minTempTxt = findViewById(R.id.min_temp);
         humidityTxt = findViewById(R.id.humidity);
-
 
         // init spinner
         weatherSpinner = findViewById(R.id.spinner_weather);
@@ -116,6 +126,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     }
 
     public void changeCity(View view) {
+        // open change city fragment
         SelectCity selectCity = SelectCity.newInstance(city);
         select_city_screen.setVisibility(View.VISIBLE);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
@@ -129,10 +140,8 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         city = cityTxt.getText().toString().trim();
         new WeatherTask().execute();
 
-        //TODO: store entered city in memory
-
-
-        Log.d(TAG, "saveCity: Saved city");
+        // store city in shared preferences (app preferences)
+        sharedPreferences.edit().putString(CITY, city).apply();
     }
 
     @SuppressLint("StaticFieldLeak")
@@ -140,7 +149,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         @Override
         protected void onPreExecute() {
             weatherSpinner.setVisibility(View.VISIBLE);
-            Log.d(TAG, "onPreExecute: showing spinner...");
             super.onPreExecute();
         }
 
