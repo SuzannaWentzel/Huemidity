@@ -85,9 +85,18 @@
                 android:layout_marginStart="24sp"
                 android:layout_marginEnd="24sp"
                 android:background="@drawable/rounded_borders"
-                android:elevation="8sp">
+                android:elevation="8sp"
+                android:onClick="saveCityGPS"
+                android:clickable="true"
+                android:focusable="true">
 
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/city_label_gps" />
             </RelativeLayout>
+
+
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -108,7 +117,7 @@
                     android:text="@string/city_label_select"
                     android:textAllCaps="false"
                     android:elevation="8sp"
-                    android:onClick="saveCity"
+                    android:onClick="saveCityInput"
                     android:clickable="true"
                     android:focusable="true"/>
             </RelativeLayout>

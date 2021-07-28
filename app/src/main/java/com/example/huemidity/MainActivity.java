@@ -1,15 +1,27 @@
 package com.example.huemidity;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.ContentResolver;
+import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
@@ -21,11 +33,16 @@ import android.widget.TextView;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
+import java.util.List;
+import java.util.Locale;
+
 public class MainActivity extends AppCompatActivity implements View.OnTouchListener {
     // constants
     private static final String TAG = "[DEBUG]";
     private static final String CITY = "city";
     private static final String DEFAULT_CITY = "Enschede";
+    private static final int LOCATION_PERMISSION_CODE = 26;
 
     // screen variables
     public View splash_screen;
@@ -39,6 +56,10 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     public TextView minTempTxt;
     public TextView humidityTxt;
     public TextView cityLabel;
+
+    // GPS variables
+    public LocationManager locationManager;
+    public LocationListener locationListener;
 
     // other global variables
     private GestureDetector gestureDetector;
@@ -68,6 +89,9 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         // init app preferences & city
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         city = sharedPreferences.getString(CITY, DEFAULT_CITY);
+
+        // init location manager
+        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
     }
 
     private void findViews() {
@@ -89,16 +113,16 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     private GestureDetector initGestureDetector() {
         main_screen.setOnTouchListener(this);
 
-        return new GestureDetector(this, new OnSwipeListener(){
+        return new GestureDetector(this, new OnSwipeListener() {
             @Override
             public boolean onSwipe(Direction direction) {
-                if (direction == Direction.up){
+                if (direction == Direction.up) {
                     //TODO: show weekly weather
                     Log.d(TAG, "onSwipe: up");
 
                 }
 
-                if (direction == Direction.down){
+                if (direction == Direction.down) {
                     // reload weather data
                     new WeatherTask().execute();
                 }
@@ -135,13 +159,128 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         transaction.commit();
     }
 
-    public void saveCity(View view) {
+    public void saveCityInput(View view) {
         EditText cityTxt = findViewById(R.id.input_city);
         city = cityTxt.getText().toString().trim();
         new WeatherTask().execute();
 
+        saveCity();
+    }
+
+    public void saveCityGPS(View view) {
+        Log.d(TAG, "saveCityGPS: Getting location....");
+        getLocation();
+        // city is saved in locationhandler
+    }
+
+    public void saveCity() {
+        // execute weathertask, if city is incorrect, it will throw an error
+        new WeatherTask().execute();
+
         // store city in shared preferences (app preferences)
         sharedPreferences.edit().putString(CITY, city).apply();
+    }
+
+    private void getLocation() {
+        // check permissions
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // no permission given, ask for permission
+            ActivityCompat.requestPermissions(this, new String[] { Manifest.permission.ACCESS_FINE_LOCATION }, LOCATION_PERMISSION_CODE);
+            return;
+        }
+        // check if GPS is enabled
+        if (GPSEnabled()) {
+            Log.d(TAG, "getLocation: Gps is enabled");
+            locationListener = new MyLocationListener();
+            locationManager.requestSingleUpdate(locationManager.GPS_PROVIDER, locationListener, null);
+        } else {
+            // GPS is disabled
+            Log.d(TAG, "getLocation: GPS is disabled");
+            // TODO: Prompt user to enable GPS
+        }
+    }
+
+    // checks if GPS is enabled/disabled
+    private boolean GPSEnabled() {
+        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+    }
+
+    private void setBackground(String weather, Double temp) {
+        switch (weather) {
+            case "few clouds":
+            case "scattered clouds":
+            case "broken clouds":
+                main_screen.setBackgroundResource(R.drawable.clouded);
+                break;
+            case "shower rain":
+            case "rain":
+                main_screen.setBackgroundResource(R.drawable.rain);
+                break;
+            case "thunderstorm":
+                main_screen.setBackgroundResource(R.drawable.thunder);
+                break;
+            case "snow":
+                main_screen.setBackgroundResource(R.drawable.snow);
+                break;
+            case "mist":
+                main_screen.setBackgroundResource(R.drawable.fog);
+                break;
+            default:
+                if (temp > 25) {
+                    main_screen.setBackgroundResource(R.drawable.hot);
+                    break;
+                }
+
+                // case "sun" included here
+                main_screen.setBackgroundResource(R.drawable.sun);
+                break;
+        }
+    }
+
+    private String getCityFromCoordinates(double latitude, double longitude) {
+        String cityName = null;
+        // use geocoder to transform lat & long to address
+        Geocoder geocoder = new Geocoder(getBaseContext(), Locale.getDefault());
+        List<Address> addresses;
+        try {
+            addresses = geocoder.getFromLocation(latitude, longitude, 1);
+            if (addresses.size() > 0) {
+                // result was found, we got a city
+                cityName = addresses.get(0).getLocality();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return cityName;
+    }
+
+    class MyLocationListener implements LocationListener {
+        @Override
+        public void onLocationChanged(Location location) {
+            double latitude = location.getLatitude();
+            double longitude = location.getLongitude();
+            String locatedCity = getCityFromCoordinates(latitude, longitude);
+            Log.d(TAG, "onLocationChanged: found city: " + locatedCity);
+
+            city = locatedCity != null? locatedCity : city;
+            saveCity();
+        }
+
+        @Override
+        public void onProviderDisabled(String provider) {
+            // TODO Auto-generated method stub
+        }
+
+        @Override
+        public void onProviderEnabled(String provider) {
+            // TODO Auto-generated method stub
+        }
+
+        @Override
+        public void onStatusChanged(String provider,
+                                    int status, Bundle extras) {
+            // TODO Auto-generated method stub
+        }
     }
 
     @SuppressLint("StaticFieldLeak")
@@ -203,38 +342,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                 cityLabel = findViewById(R.id.label_city);
                 cityLabel.setTextColor(getResources().getColor(R.color.red));
                 cityLabel.setText(getResources().getString(R.string.city_label_input_error));
-            }
-        }
-
-        private void setBackground(String weather, Double temp) {
-            switch (weather) {
-                case "few clouds":
-                case "scattered clouds":
-                case "broken clouds":
-                    main_screen.setBackgroundResource(R.drawable.clouded);
-                    break;
-                case "shower rain":
-                case "rain":
-                    main_screen.setBackgroundResource(R.drawable.rain);
-                    break;
-                case "thunderstorm":
-                    main_screen.setBackgroundResource(R.drawable.thunder);
-                    break;
-                case "snow":
-                    main_screen.setBackgroundResource(R.drawable.snow);
-                    break;
-                case "mist":
-                    main_screen.setBackgroundResource(R.drawable.fog);
-                    break;
-                default:
-                    if (temp > 25) {
-                        main_screen.setBackgroundResource(R.drawable.hot);
-                        break;
-                    }
-
-                    // case "sun" included here
-                    main_screen.setBackgroundResource(R.drawable.sun);
-                    break;
             }
         }
     }
