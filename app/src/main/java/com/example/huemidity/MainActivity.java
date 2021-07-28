@@ -163,7 +163,13 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     public void saveCityInput(View view) {
         EditText cityTxt = findViewById(R.id.input_city);
         city = cityTxt.getText().toString().trim();
-        new WeatherTask().execute();
+
+        saveCity();
+    }
+
+    public void saveCityInput() {
+        EditText cityTxt = findViewById(R.id.input_city);
+        city = cityTxt.getText().toString().trim();
 
         saveCity();
     }
