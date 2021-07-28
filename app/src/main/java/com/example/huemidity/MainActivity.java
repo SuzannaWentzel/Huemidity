@@ -10,6 +10,7 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Address;
@@ -168,7 +169,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     }
 
     public void saveCityGPS(View view) {
-        Log.d(TAG, "saveCityGPS: Getting location....");
         getLocation();
         // city is saved in locationhandler
     }
@@ -190,13 +190,12 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         }
         // check if GPS is enabled
         if (GPSEnabled()) {
-            Log.d(TAG, "getLocation: Gps is enabled");
             locationListener = new MyLocationListener();
             locationManager.requestSingleUpdate(locationManager.GPS_PROVIDER, locationListener, null);
         } else {
-            // GPS is disabled
-            Log.d(TAG, "getLocation: GPS is disabled");
-            // TODO: Prompt user to enable GPS
+            // GPS is disabled, request enabling gps
+            Intent onGPS = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+            startActivity(onGPS);
         }
     }
 
