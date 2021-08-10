@@ -3,8 +3,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SelectCity"
-    android:background="@color/gray_200">
+    tools:context=".SelectCity">
+
+    <ImageView
+        android:id="@+id/background_image"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/sun_blurred" />
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -40,6 +46,8 @@
                 android:layout_marginBottom="40sp"
                 android:layout_marginStart="48sp"
                 android:layout_marginEnd="24sp"/>
+
+
 
             <RelativeLayout
                 android:id="@+id/container_city_input"
@@ -101,13 +109,8 @@
             <RelativeLayout
                 android:id="@+id/container_gps"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:minHeight="150sp"
+                android:layout_height="150sp"
                 android:layout_below="@id/container_city_input"
-                android:paddingStart="24sp"
-                android:paddingEnd="24sp"
-                android:paddingTop="16sp"
-                android:paddingBottom="16sp"
                 android:layout_marginBottom="24sp"
                 android:layout_marginStart="24sp"
                 android:layout_marginEnd="24sp"
@@ -118,20 +121,24 @@
                 android:focusable="true">
 
                 <TextView
+                    android:id="@+id/label_gps"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:paddingStart="24sp"
+                    android:paddingEnd="24sp"
+                    android:paddingTop="16sp"
+                    android:paddingBottom="16sp"
                     android:text="@string/city_label_gps" />
-            </RelativeLayout>
 
-
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/container_gps">
-
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/satellite"
+                    android:adjustViewBounds="true"
+                    android:layout_alignParentEnd="true" />
 
             </RelativeLayout>
+
         </RelativeLayout>
     </RelativeLayout>
 </FrameLayout>

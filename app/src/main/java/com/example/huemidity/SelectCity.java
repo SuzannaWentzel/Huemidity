@@ -1,21 +1,15 @@
 package com.example.huemidity;
 
 import android.os.Bundle;
-
 import androidx.fragment.app.Fragment;
-
-import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.util.Objects;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -65,6 +59,7 @@ public class SelectCity extends Fragment {
         this.cityTxt = (EditText) view.findViewById(R.id.input_city);
         cityTxt.setText(city, TextView.BufferType.EDITABLE);
         cityTxt.setOnEditorActionListener(actionListener);
+
         //TODO: make cards selectable, select city based on selection
         this.btnBack = (ImageView) view.findViewById(R.id.btn_back);
         this.btnBack.setOnClickListener(new View.OnClickListener()
@@ -78,11 +73,10 @@ public class SelectCity extends Fragment {
         return view;
     }
 
-
     private TextView.OnEditorActionListener actionListener
             = (v, actionId, event) -> {
         if (actionId == EditorInfo.IME_ACTION_DONE) {
-            ((MainActivity) getActivity()).saveCityInput();
+            ((MainActivity) getActivity()).saveCityInput(null);
         }
 
         return false;

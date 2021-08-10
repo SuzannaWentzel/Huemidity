@@ -1,6 +1,5 @@
 package com.example.huemidity;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentManager;
@@ -8,7 +7,6 @@ import androidx.fragment.app.FragmentTransaction;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -161,13 +159,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     }
 
     public void saveCityInput(View view) {
-        EditText cityTxt = findViewById(R.id.input_city);
-        city = cityTxt.getText().toString().trim();
-
-        saveCity();
-    }
-
-    public void saveCityInput() {
         EditText cityTxt = findViewById(R.id.input_city);
         city = cityTxt.getText().toString().trim();
 
