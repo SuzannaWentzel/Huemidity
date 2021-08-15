@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -18,11 +19,14 @@ import android.widget.TextView;
  */
 public class SelectCity extends Fragment {
     private static final String CITY = "city";
+    private static final String WEATHER = "weather";
 
     private String city;
+    private String weather;
 
     private EditText cityTxt;
     private ImageView btnBack;
+    private FrameLayout fragmentContainer;
 
     public SelectCity() {
         // Required empty public constructor
@@ -35,10 +39,11 @@ public class SelectCity extends Fragment {
      * @param city Parameter 1.
      * @return A new instance of fragment SelectCity.
      */
-    public static SelectCity newInstance(String city) {
+    public static SelectCity newInstance(String city, String weather) {
         SelectCity fragment = new SelectCity();
         Bundle args = new Bundle();
         args.putString(CITY, city);
+        args.putString(WEATHER, weather);
         fragment.setArguments(args);
         return fragment;
     }
@@ -48,6 +53,7 @@ public class SelectCity extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             city = getArguments().getString(CITY);
+            weather = getArguments().getString(WEATHER);
         }
     }
 
@@ -59,6 +65,10 @@ public class SelectCity extends Fragment {
         this.cityTxt = (EditText) view.findViewById(R.id.input_city);
         cityTxt.setText(city, TextView.BufferType.EDITABLE);
         cityTxt.setOnEditorActionListener(actionListener);
+
+        // Show blurred background corresponding to weather
+        fragmentContainer = (FrameLayout) view.findViewById(R.id.fragment_container);
+        setBackground(weather);
 
         //TODO: make cards selectable, select city based on selection
         this.btnBack = (ImageView) view.findViewById(R.id.btn_back);
@@ -81,6 +91,32 @@ public class SelectCity extends Fragment {
 
         return false;
     };
+
+    private void setBackground(String weather) {
+        switch (weather) {
+            case "clouds":
+                fragmentContainer.setBackgroundResource(R.drawable.clouded_blurred);
+                break;
+            case "rain":
+                fragmentContainer.setBackgroundResource(R.drawable.rain_blurred);
+                break;
+            case "thunder":
+                fragmentContainer.setBackgroundResource(R.drawable.thunder_blurred);
+                break;
+            case "snow":
+                fragmentContainer.setBackgroundResource(R.drawable.snow_blurred);
+                break;
+            case "fog":
+                fragmentContainer.setBackgroundResource(R.drawable.fog_blurred);
+                break;
+            case "hot":
+                fragmentContainer.setBackgroundResource(R.drawable.hot_blurred);
+                break;
+            default:
+                fragmentContainer.setBackgroundResource(R.drawable.sun_blurred);
+                break;
+        }
+    }
 
 
 }

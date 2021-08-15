@@ -44,9 +44,9 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     private static final int LOCATION_PERMISSION_CODE = 26;
 
     // screen variables
-    public View splash_screen;
-    public View main_screen;
-    public View select_city_screen;
+    public View splashScreen;
+    public View mainScreen;
+    public View selectCityScreen;
 
     // view elements
     public TextView tempTxt;
@@ -65,6 +65,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     private ProgressBar weatherSpinner;
     private SharedPreferences sharedPreferences;
     public String city;
+    public String weatherBackground;
 
 
     @Override
@@ -74,8 +75,8 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         getSupportActionBar().hide();
 
         // set splash screen
-        splash_screen = findViewById(R.id.splash_screen);
-        splash_screen.setVisibility(View.VISIBLE);
+        splashScreen = findViewById(R.id.splash_screen);
+        splashScreen.setVisibility(View.VISIBLE);
 
         findViews();
 
@@ -95,8 +96,8 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
     private void findViews() {
         // init screens
-        main_screen = findViewById(R.id.main_container);
-        select_city_screen = findViewById(R.id.select_city_container);
+        mainScreen = findViewById(R.id.main_container);
+        selectCityScreen = findViewById(R.id.select_city_container);
 
         // init views
         cityTxt = findViewById(R.id.city);
@@ -110,7 +111,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     }
 
     private GestureDetector initGestureDetector() {
-        main_screen.setOnTouchListener(this);
+        mainScreen.setOnTouchListener(this);
 
         return new GestureDetector(this, new OnSwipeListener() {
             @Override
@@ -150,8 +151,8 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
     public void changeCity(View view) {
         // open change city fragment
-        SelectCity selectCity = SelectCity.newInstance(city);
-        select_city_screen.setVisibility(View.VISIBLE);
+        SelectCity selectCity = SelectCity.newInstance(city, weatherBackground);
+        selectCityScreen.setVisibility(View.VISIBLE);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.add(R.id.select_city_container, selectCity);
         transaction.addToBackStack(null);
@@ -206,29 +207,36 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
             case "few clouds":
             case "scattered clouds":
             case "broken clouds":
-                main_screen.setBackgroundResource(R.drawable.clouded);
+                weatherBackground = "clouds";
+                mainScreen.setBackgroundResource(R.drawable.clouded);
                 break;
             case "shower rain":
             case "rain":
-                main_screen.setBackgroundResource(R.drawable.rain);
+                weatherBackground = "rain";
+                mainScreen.setBackgroundResource(R.drawable.rain);
                 break;
             case "thunderstorm":
-                main_screen.setBackgroundResource(R.drawable.thunder);
+                weatherBackground = "thunder";
+                mainScreen.setBackgroundResource(R.drawable.thunder);
                 break;
             case "snow":
-                main_screen.setBackgroundResource(R.drawable.snow);
+                weatherBackground = "snow";
+                mainScreen.setBackgroundResource(R.drawable.snow);
                 break;
             case "mist":
-                main_screen.setBackgroundResource(R.drawable.fog);
+                weatherBackground = "fog";
+                mainScreen.setBackgroundResource(R.drawable.fog);
                 break;
             default:
                 if (temp > 25) {
-                    main_screen.setBackgroundResource(R.drawable.hot);
+                    weatherBackground = "hot";
+                    mainScreen.setBackgroundResource(R.drawable.hot);
                     break;
                 }
 
                 // case "sun" included here
-                main_screen.setBackgroundResource(R.drawable.sun);
+                weatherBackground = "sun";
+                mainScreen.setBackgroundResource(R.drawable.sun);
                 break;
         }
     }
@@ -321,8 +329,8 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                 // Hide spinner, hide the splash screen, show the main design
                 //TODO: add fade-transition between screens
                 weatherSpinner.setVisibility(View.GONE);
-                splash_screen.setVisibility(View.GONE);
-                main_screen.setVisibility(View.VISIBLE);
+                splashScreen.setVisibility(View.GONE);
+                mainScreen.setVisibility(View.VISIBLE);
 
                 // close fragment if found on stack
                 FragmentManager manager = getSupportFragmentManager();

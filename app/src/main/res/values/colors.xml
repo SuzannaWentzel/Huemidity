@@ -8,6 +8,6 @@
     <color name="gray_200">#FFCDCDCD</color>
     <color name="gray_opacid">#33494949</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="white_opacid">#33FFFFFF</color>
+    <color name="white_opacid">#66FFFFFF</color>
     <color name="red">#9F0033</color>
 </resources>
