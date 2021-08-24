@@ -70,7 +70,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
-                    android:orientation="horizontal">
+                    android:layout_centerVertical="true"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
                     <EditText
                         android:id="@+id/input_city"
                         android:layout_width="0dp"
@@ -94,6 +96,16 @@
                         android:clickable="true"
                         android:focusable="true" />
 
+                    <ProgressBar
+                        android:id="@+id/spinner_manually_entered"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:progressTint="@color/gray_600"
+                        android:layout_marginStart="16sp"
+                        android:visibility="gone"
+                        style="@android:style/Widget.ProgressBar.Small"
+                        />
+
                 </LinearLayout>
 
 
@@ -115,15 +127,31 @@
                 android:clickable="true"
                 android:focusable="true">
 
-                <TextView
-                    android:id="@+id/label_gps"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingStart="24sp"
                     android:paddingEnd="24sp"
                     android:paddingTop="16sp"
-                    android:paddingBottom="16sp"
-                    android:text="@string/city_label_gps" />
+                    android:paddingBottom="16sp">
+
+                    <TextView
+                        android:id="@+id/label_gps"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/city_label_gps" />
+
+                    <ProgressBar
+                        android:id="@+id/spinner_gps  "
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:progressTint="@color/gray_600"
+                        android:layout_marginStart="16sp"
+                        android:visibility="gone"
+                        style="@android:style/Widget.ProgressBar.Small"
+                        />
+                </LinearLayout>
+
 
                 <ImageView
                     android:layout_width="wrap_content"

@@ -26,6 +26,7 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -124,6 +125,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
                 if (direction == Direction.down) {
                     // reload weather data
+                    weatherSpinner.setVisibility(View.VISIBLE);
                     new WeatherTask().execute();
                 }
 
@@ -160,6 +162,13 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     }
 
     public void saveCityInput(View view) {
+        // change button with loading spinner
+        ProgressBar manualSpinner = findViewById(R.id.spinner_manually_entered);
+        manualSpinner.setVisibility(View.VISIBLE);
+        ImageView btn = findViewById(R.id.btn_save_city);
+        btn.setVisibility(View.GONE);
+
+        // retrieve the city that was entered
         EditText cityTxt = findViewById(R.id.input_city);
         city = cityTxt.getText().toString().trim();
 
@@ -167,6 +176,10 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     }
 
     public void saveCityGPS(View view) {
+        // show spinner to indicate it's loading
+        ProgressBar gpsSpinner = findViewById(R.id.spinner_gps);
+        gpsSpinner.setVisibility(View.VISIBLE);
+
         getLocation();
         // city is saved in locationhandler
     }
@@ -291,7 +304,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     class WeatherTask extends AsyncTask<String, Void, String> {
         @Override
         protected void onPreExecute() {
-            weatherSpinner.setVisibility(View.VISIBLE);
             super.onPreExecute();
         }
 
