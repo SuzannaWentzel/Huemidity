@@ -98,17 +98,14 @@
 
                     <ProgressBar
                         android:id="@+id/spinner_manually_entered"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:progressTint="@color/gray_600"
+                        android:layout_width="18sp"
+                        android:layout_height="18sp"
                         android:layout_marginStart="16sp"
                         android:visibility="gone"
-                        style="@android:style/Widget.ProgressBar.Small"
+                        android:indeterminateDrawable="@drawable/indeterminate_progress_circle"
                         />
 
                 </LinearLayout>
-
-
 
 
             </RelativeLayout>
@@ -133,7 +130,8 @@
                     android:paddingStart="24sp"
                     android:paddingEnd="24sp"
                     android:paddingTop="16sp"
-                    android:paddingBottom="16sp">
+                    android:paddingBottom="16sp"
+                    android:gravity="center_vertical">
 
                     <TextView
                         android:id="@+id/label_gps"
@@ -142,13 +140,12 @@
                         android:text="@string/city_label_gps" />
 
                     <ProgressBar
-                        android:id="@+id/spinner_gps  "
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:progressTint="@color/gray_600"
-                        android:layout_marginStart="16sp"
+                        android:id="@+id/spinner_gps"
+                        android:layout_width="18sp"
+                        android:layout_height="18sp"
+                        android:layout_marginStart="8sp"
                         android:visibility="gone"
-                        style="@android:style/Widget.ProgressBar.Small"
+                        android:indeterminateDrawable="@drawable/indeterminate_progress_circle"
                         />
                 </LinearLayout>
 
