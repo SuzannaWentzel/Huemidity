@@ -67,10 +67,9 @@ public class SelectCity extends Fragment {
         cityTxt.setOnEditorActionListener(actionListener);
 
         // Show blurred background corresponding to weather
-        fragmentContainer = (FrameLayout) view.findViewById(R.id.fragment_container);
+        fragmentContainer = (FrameLayout) view.findViewById(R.id.select_city_fragment);
         setBackground(weather);
 
-        //TODO: make cards selectable, select city based on selection
         this.btnBack = (ImageView) view.findViewById(R.id.btn_back);
         this.btnBack.setOnClickListener(new View.OnClickListener()
         {

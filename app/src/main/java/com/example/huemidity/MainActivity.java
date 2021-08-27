@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     // screen variables
     public View splashScreen;
     public View mainScreen;
-    public View selectCityScreen;
+    public View fragmentScreen;
 
     // view elements
     public TextView tempTxt;
@@ -98,7 +98,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     private void findViews() {
         // init screens
         mainScreen = findViewById(R.id.main_container);
-        selectCityScreen = findViewById(R.id.select_city_container);
+        fragmentScreen = findViewById(R.id.fragment_container);
 
         // init views
         cityTxt = findViewById(R.id.city);
@@ -118,9 +118,8 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
             @Override
             public boolean onSwipe(Direction direction) {
                 if (direction == Direction.up) {
-                    //TODO: show weekly weather
                     Log.d(TAG, "onSwipe: up");
-
+                    checkWeeklyWeather();
                 }
 
                 if (direction == Direction.down) {
@@ -151,12 +150,27 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         return true;
     }
 
+    /**
+     * Opens select city fragment
+     * @param view
+     */
     public void changeCity(View view) {
-        // open change city fragment
         SelectCity selectCity = SelectCity.newInstance(city, weatherBackground);
-        selectCityScreen.setVisibility(View.VISIBLE);
+        fragmentScreen.setVisibility(View.VISIBLE);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.add(R.id.select_city_container, selectCity);
+        transaction.add(R.id.fragment_container, selectCity);
+        transaction.addToBackStack(null);
+        transaction.commit();
+    }
+
+    /**
+     * Opens weekly weather fragment
+     */
+    public void checkWeeklyWeather() {
+        WeeklyWeather weeklyWeather = WeeklyWeather.newInstance(city);
+        fragmentScreen.setVisibility(View.VISIBLE);
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.add(R.id.fragment_container, weeklyWeather);
         transaction.addToBackStack(null);
         transaction.commit();
     }

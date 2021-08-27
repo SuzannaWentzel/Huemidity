@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".WeeklyWeather"
+    >
+
+    <RelativeLayout
+        android:id="@+id/weekly_weather_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/sun_blurred">
+
+        <ProgressBar
+            android:id="@+id/spinner_weekly_weather"
+            android:layout_width="48sp"
+            android:layout_height="48sp"
+            android:layout_marginStart="16sp"
+            android:visibility="visible"
+            android:layout_centerInParent="true"
+            android:indeterminateDrawable="@drawable/indeterminate_progress_circle"
+            />
+
+        <RelativeLayout
+            android:id="@+id/weekly_weather_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone">
+            <TextView
+                android:id="@+id/day"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Thursday"
+                android:textSize="32sp"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="72sp"
+                android:layout_marginBottom="8sp"
+                android:layout_marginStart="48sp"
+                android:layout_marginEnd="48sp"/>
+
+            <TextView
+                android:id="@+id/date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="August 26, Enschede"
+                android:layout_below="@id/day"
+                android:textColor="@color/gray_600"
+                android:layout_alignParentEnd="true"
+                android:layout_marginBottom="40sp"
+                android:layout_marginStart="48sp"
+                android:layout_marginEnd="48sp" />
+
+            <TextView
+                android:id="@+id/degrees"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/date"
+                android:text="23 *C"
+                android:textSize="32sp"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:layout_alignParentEnd="true"
+                android:layout_marginBottom="8sp"
+                android:layout_marginStart="48sp"
+                android:layout_marginEnd="48sp"/>
+
+            <TextView
+                android:id="@+id/humidity_weekly"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Humidity: 23%"
+                android:layout_below="@id/degrees"
+                android:textColor="@color/gray_600"
+                android:layout_alignParentEnd="true"
+                android:layout_marginBottom="40sp"
+                android:layout_marginStart="48sp"
+                android:layout_marginEnd="48sp" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="fill_parent"
+                android:layout_below="@id/humidity_weekly" >
+
+                <LinearLayout
+                    android:id="@+id/day_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:paddingTop="32sp"
+                    android:paddingBottom="96sp"
+                    android:layout_marginStart="-48sp"
+                    android:layout_marginEnd="-48sp">
+
+                    <ImageView
+                        android:id="@+id/previous_day"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/sun"
+                        android:layout_weight="3"
+                        android:elevation="24dp"/>
+
+                    <ImageView
+                        android:id="@+id/current_day"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/sun"
+                        android:layout_weight="5"
+                        android:layout_marginStart="32sp"
+                        android:layout_marginEnd="32sp"
+                        android:elevation="36dp"/>
+
+                    <ImageView
+                        android:id="@+id/next_day"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/sun"
+                        android:layout_weight="3"
+                        android:elevation="42dp"/>
+
+                </LinearLayout>
+            </RelativeLayout>
+        </RelativeLayout>
+    </RelativeLayout>
+
+</FrameLayout>
